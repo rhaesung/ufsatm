@@ -424,6 +424,44 @@ if(RRTMGP_32BIT)
 endif()
 
 #------------------------------------------------------------------------------
+# Set flags for SATMEDMF PBL (32-bit option)
+#------------------------------------------------------------------------------
+option(SATMEDMF_32BIT "Compile SATMEDMF PBL with 32-bit precision" OFF)
+
+if(SATMEDMF_32BIT)
+  message(STATUS "Compile CCPP SATMEDMF PBL with 32-bit precision")
+
+  set(SATMEDMF_NAMES
+    mo_pbl_kind.F90
+    canopy_driver.F
+    canopy_levs.F90
+    canopy_mask.F90
+    canopy_transfer.F90
+    mfscuq.f
+    satmedmfvdifq.F
+    satmedmfvdifq_can.F
+    mfpbltq.f
+    tridi_SATMEDMF.f
+  )
+  set(SATMEDMF_FORTRAN_FILES)
+
+  foreach(NAME IN LISTS SATMEDMF_NAMES)
+    set(TMP_LIST ${SCHEME_FORTRAN_FILES})
+    list(FILTER TMP_LIST INCLUDE REGEX ".*${NAME}$")
+    list(APPEND SATMEDMF_FORTRAN_FILES ${TMP_LIST})
+  endforeach()
+
+  if(SATMEDMF_FORTRAN_FILES)
+    if(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
+      set_property(SOURCE ${SATMEDMF_FORTRAN_FILES} APPEND PROPERTY COMPILE_OPTIONS "-real-size;32;-DSATMEDMF_USE_SP")
+    elseif(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
+      set_property(SOURCE ${SATMEDMF_FORTRAN_FILES} APPEND PROPERTY COMPILE_OPTIONS "-fno-default-real-8;-fdefault-double-8;-DSATMEDMF_USE_SP")
+    endif()
+  endif()
+endif()
+
+
+#------------------------------------------------------------------------------
 # For CAPS, remove bounds checks with Intel Classic (ifort), Intel LLVM (ifx),
 # and GNU (gfortran) to avoid the compilation being killed or taking forever
 #------------------------------------------------------------------------------
