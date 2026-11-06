@@ -451,7 +451,6 @@ if(SAMFCNV_32BIT)
       set_property(SOURCE ${SAMF_FORTRAN_FILES} APPEND PROPERTY COMPILE_OPTIONS "-real-size;32;-DSAMFCNV_USE_SP")
     elseif(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
       set_property(SOURCE ${SAMF_FORTRAN_FILES} APPEND PROPERTY COMPILE_OPTIONS "-fno-default-real-8;-fdefault-double-8;-DSAMFCNV_USE_SP")
->>>>>>> upstream/develop
     endif()
   endif()
 endif()
@@ -489,6 +488,9 @@ if(SATMEDMF_32BIT)
       set_property(SOURCE ${SATMEDMF_FORTRAN_FILES} APPEND PROPERTY COMPILE_OPTIONS "-real-size;32;-DSATMEDMF_USE_SP")
     elseif(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
       set_property(SOURCE ${SATMEDMF_FORTRAN_FILES} APPEND PROPERTY COMPILE_OPTIONS "-fno-default-real-8;-fdefault-double-8;-DSATMEDMF_USE_SP")
+    endif()
+  endif()
+endif()
 
 #------------------------------------------------------------------------------
 # For CAPS, remove bounds checks with Intel Classic (ifort), Intel LLVM (ifx),
