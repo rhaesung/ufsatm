@@ -470,6 +470,7 @@ if(SATMEDMF_32BIT)
     canopy_mask.F90
     canopy_transfer.F90
     mfscuq.f
+    mfscuq_mlm.f
     satmedmfvdifq.F
     satmedmfvdifq_can.F
     mfpbltq.f
