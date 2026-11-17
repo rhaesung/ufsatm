@@ -464,6 +464,44 @@ if(SAMFCNV_32BIT)
 endif()
 
 #------------------------------------------------------------------------------
+# Set flags for UGWPv1 (32-bit option)
+#------------------------------------------------------------------------------
+option(UGWPV1_32BIT "Compile UGWPv1 with 32-bit precision" OFF)
+
+if(UGWPV1_32BIT)
+  message(STATUS "Compile CCPP UGWPv1 with 32-bit precision")
+
+  set(UGWPV1_NAMES
+    mo_ugwpv1_kind.F90
+    cires_ugwpv1_initialize.F90
+    cires_ugwpv1_module.F90
+    cires_ugwpv1_triggers.F90
+    cires_ugwpv1_solv2.F90
+    cires_ugwpv1_sporo.F90
+    cires_ugwpv1_oro.F90
+    ecmwf_ngw.F90
+    drag_suite_ugwpv1.F90
+    ugwpv1_gsldrag.F90
+    ugwpv1_gsldrag_post.F90
+  )
+  set(UGWPV1_FORTRAN_FILES)
+
+  foreach(NAME IN LISTS UGWPV1_NAMES)
+    set(TMP_LIST ${SCHEME_FORTRAN_FILES})
+    list(FILTER TMP_LIST INCLUDE REGEX ".*/${NAME}$")
+    list(APPEND UGWPV1_FORTRAN_FILES ${TMP_LIST})
+  endforeach()
+
+  if(UGWPV1_FORTRAN_FILES)
+    if(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
+      set_property(SOURCE ${UGWPV1_FORTRAN_FILES} APPEND PROPERTY COMPILE_OPTIONS "-real-size;32;-DUGWPV1_USE_SP")
+    elseif(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
+      set_property(SOURCE ${UGWPV1_FORTRAN_FILES} APPEND PROPERTY COMPILE_OPTIONS "-fno-default-real-8;-fdefault-double-8;-DUGWPV1_USE_SP")
+    endif()
+  endif()
+endif()
+
+#------------------------------------------------------------------------------
 # For CAPS, remove bounds checks with Intel Classic (ifort), Intel LLVM (ifx),
 # and GNU (gfortran) to avoid the compilation being killed or taking forever
 #------------------------------------------------------------------------------
